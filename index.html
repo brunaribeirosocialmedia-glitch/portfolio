@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bruna Ribeiro — Estratégia de Conteúdo & Marketing Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Questrial&family=Alice&display=swap" rel="stylesheet">
+<style>
+:root {
+  --indigo: #040022;
+  --cinza: #C2C2C2;
+  --cinza-claro: #E1E1E1;
+  --branco: #FFFFFF;
+  --accent: #7B79F7;
+  --accent-dim: rgba(123,121,247,0.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--indigo);
+  color: var(--cinza-claro);
+  font-family: 'Questrial', sans-serif;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--indigo); }
+::-webkit-scrollbar-thumb { background: rgba(194,194,194,0.3); border-radius: 2px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 60px;
+  background: rgba(4,0,34,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(194,194,194,0.08);
+}
+.nav-logo {
+  font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--branco);
+}
+.nav-links { display: flex; gap: 36px; }
+.nav-links a {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--cinza); text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--branco); }
+.nav-cta {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--indigo) !important;
+  background: var(--branco);
+  padding: 8px 20px;
+  transition: opacity 0.2s !important;
+}
+.nav-cta:hover { opacity: 0.85; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 60px 80px;
+  position: relative;
+  border-bottom: 1px solid rgba(194,194,194,0.1);
+}
+.hero-tag {
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--cinza); margin-bottom: 28px;
+}
+.hero-name {
+  font-size: clamp(48px, 7vw, 96px);
+  font-weight: normal; letter-spacing: -2px;
+  line-height: 1.05; color: var(--branco);
+  margin-bottom: 32px;
+  font-family: 'Alice', serif;
+}
+.hero-name em { color: var(--cinza); font-style: normal; }
+.hero-desc {
+  max-width: 560px;
+  font-size: 16px; color: var(--cinza-claro); line-height: 1.75;
+  margin-bottom: 48px;
+}
+.hero-actions { display: flex; gap: 20px; align-items: center; }
+.btn-primary {
+  display: inline-block;
+  background: var(--branco); color: var(--indigo);
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  padding: 14px 32px; text-decoration: none;
+  transition: opacity 0.2s;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-ghost {
+  display: inline-block;
+  border: 1px solid rgba(194,194,194,0.3); color: var(--cinza);
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  padding: 14px 32px; text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-ghost:hover { border-color: var(--branco); color: var(--branco); }
+.hero-number {
+  position: absolute; right: 60px; bottom: 80px;
+  font-size: 160px; font-weight: bold;
+  color: rgba(194,194,194,0.04); letter-spacing: -8px;
+  line-height: 1; pointer-events: none; user-select: none;
+}
+.hero-line {
+  position: absolute; left: 0; top: 50%;
+  width: 1px; height: 180px;
+  background: linear-gradient(to bottom, transparent, rgba(194,194,194,0.15), transparent);
+}
+
+/* ── SECTION BASE ── */
+section { padding: 100px 60px; border-bottom: 1px solid rgba(194,194,194,0.08); }
+.section-eyebrow {
+  font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--cinza); margin-bottom: 16px;
+}
+.section-title {
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: normal; color: var(--branco); margin-bottom: 48px;
+  letter-spacing: -0.5px; font-family: 'Alice', serif;
+}
+
+/* ── SOBRE ── */
+.sobre-grid {
+  display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px;
+}
+.sobre-text p {
+  font-size: 15px; color: var(--cinza-claro); margin-bottom: 20px; line-height: 1.85;
+}
+.sobre-text p strong { color: var(--branco); }
+.sobre-aside { border-left: 1px solid rgba(194,194,194,0.15); padding-left: 48px; }
+.aside-block { margin-bottom: 36px; }
+.aside-label {
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--cinza); margin-bottom: 10px;
+}
+.aside-value { font-size: 13px; color: var(--cinza-claro); line-height: 1.6; }
+
+/* ── PROCESSO ── */
+.processo-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(194,194,194,0.1); }
+.step {
+  background: var(--indigo); padding: 40px 32px;
+  cursor: pointer; transition: background 0.25s;
+  position: relative; overflow: hidden;
+}
+.step:hover, .step.active { background: rgba(123,121,247,0.07); }
+.step-num {
+  font-size: 48px; font-weight: bold;
+  color: rgba(194,194,194,0.12); letter-spacing: -2px;
+  line-height: 1; margin-bottom: 20px;
+}
+.step-title {
+  font-size: 15px; color: var(--branco); margin-bottom: 12px;
+}
+.step-desc { font-size: 12px; color: var(--cinza); line-height: 1.7; }
+.step-detail {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s ease, margin-top 0.3s;
+  font-size: 12px; color: var(--cinza-claro); line-height: 1.75;
+}
+.step.active .step-detail { max-height: 300px; margin-top: 16px; }
+.step-bar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background: var(--accent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s;
+}
+.step.active .step-bar { transform: scaleX(1); }
+
+/* ── COPY EXAMPLES ── */
+.copy-tabs-nav {
+  display: flex; gap: 0; border-bottom: 1px solid rgba(194,194,194,0.15);
+  margin-bottom: 0; flex-wrap: wrap;
+}
+.copy-tab-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--cinza); padding: 14px 24px; font-family: inherit;
+  border-bottom: 2px solid transparent; transition: all 0.2s;
+}
+.copy-tab-btn:hover { color: var(--branco); }
+.copy-tab-btn.active { color: var(--branco); border-bottom-color: var(--branco); }
+.copy-tab-content { display: none; padding: 48px 0 0; }
+.copy-tab-content.active { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.copy-card {
+  border: 1px solid rgba(194,194,194,0.12); padding: 32px;
+  position: relative; transition: border-color 0.2s;
+}
+.copy-card:hover { border-color: rgba(194,194,194,0.3); }
+.copy-card-tag {
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 20px;
+}
+.copy-card-text {
+  font-size: 14px; color: var(--cinza-claro); line-height: 1.85;
+  white-space: pre-line;
+}
+.copy-card-text strong { color: var(--branco); }
+.copy-card-note {
+  margin-top: 20px; padding-top: 16px;
+  border-top: 1px solid rgba(194,194,194,0.1);
+  font-size: 11px; color: var(--cinza); font-style: italic; line-height: 1.6;
+}
+.copy-single { grid-column: span 2; }
+
+/* ── STACK IA ── */
+.stack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(194,194,194,0.08); }
+.stack-card {
+  background: var(--indigo); padding: 36px 32px;
+  transition: background 0.2s;
+}
+.stack-card:hover { background: rgba(123,121,247,0.05); }
+.stack-icon {
+  font-size: 28px; margin-bottom: 16px;
+}
+.stack-name { font-size: 16px; color: var(--branco); margin-bottom: 8px; }
+.stack-role { font-size: 12px; color: var(--accent); margin-bottom: 14px; letter-spacing: 1px; }
+.stack-desc { font-size: 12px; color: var(--cinza); line-height: 1.7; }
+
+/* ── AUTOMAÇÕES ── */
+.auto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.auto-card {
+  border: 1px solid rgba(194,194,194,0.1); padding: 32px;
+  transition: border-color 0.2s;
+}
+.auto-card:hover { border-color: rgba(123,121,247,0.4); }
+.auto-status {
+  display: inline-block; font-size: 9px; letter-spacing: 2px;
+  text-transform: uppercase; padding: 4px 12px; margin-bottom: 18px;
+  border-radius: 20px;
+}
+.status-live { background: rgba(46,204,154,0.15); color: #2ECC9A; }
+.status-build { background: rgba(245,200,66,0.15); color: #F5C842; }
+.auto-title { font-size: 17px; color: var(--branco); margin-bottom: 10px; }
+.auto-desc { font-size: 13px; color: var(--cinza); line-height: 1.7; margin-bottom: 18px; }
+.auto-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.auto-tag {
+  font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+  padding: 4px 10px; background: rgba(194,194,194,0.06);
+  color: var(--cinza); border: 1px solid rgba(194,194,194,0.12);
+}
+
+/* ── CONTATO ── */
+.contato-inner {
+  max-width: 640px;
+}
+.contato-headline {
+  font-size: clamp(28px, 4vw, 52px); font-weight: normal;
+  color: var(--branco); letter-spacing: -1px; margin-bottom: 24px; line-height: 1.15;
+  font-family: 'Alice', serif;
+}
+.contato-sub { font-size: 15px; color: var(--cinza-claro); margin-bottom: 48px; line-height: 1.75; }
+
+/* ── FOOTER ── */
+footer {
+  padding: 28px 60px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid rgba(194,194,194,0.08);
+}
+.footer-name { font-size: 11px; letter-spacing: 2px; color: var(--cinza); text-transform: uppercase; }
+.footer-note { font-size: 10px; color: rgba(194,194,194,0.3); font-style: italic; }
+
+/* ── FADE IN ANIMATION ── */
+.fade-in {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ── HIGHLIGHT BAR ── */
+.highlight-bar {
+  display: inline-block;
+  border-left: 2px solid var(--accent);
+  padding: 16px 24px;
+  background: var(--accent-dim);
+  font-size: 14px; color: var(--cinza-claro);
+  line-height: 1.7; margin: 32px 0; font-style: italic;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  nav { padding: 18px 24px; }
+  .nav-links { display: none; }
+  section, .hero { padding-left: 24px; padding-right: 24px; }
+  .hero { padding-bottom: 60px; }
+  .hero-number { display: none; }
+  .sobre-grid { grid-template-columns: 1fr; gap: 40px; }
+  .sobre-aside { border-left: none; border-top: 1px solid rgba(194,194,194,0.15); padding-left: 0; padding-top: 32px; }
+  .processo-steps { grid-template-columns: 1fr 1fr; }
+  .copy-tab-content.active { grid-template-columns: 1fr; }
+  .copy-single { grid-column: span 1; }
+  .stack-grid { grid-template-columns: 1fr 1fr; }
+  .auto-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 10px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Bruna Ribeiro</div>
+  <div class="nav-links">
+    <a href="#sobre">Sobre</a>
+    <a href="#processo">Processo</a>
+    <a href="#copy">Conteúdo</a>
+    <a href="#ia">Stack IA</a>
+    <a href="#contato" class="nav-cta">Contato</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-line"></div>
+  <div class="hero-tag" style="font-family:'Questrial',sans-serif;">Estratégia de Conteúdo · Marketing Digital · IA Aplicada</div>
+  <h1 class="hero-name">
+    Bruna<br>
+    <em>Ribeiro.</em>
+  </h1>
+  <p class="hero-desc">
+    Especialista em construção de percepção de valor, posicionamento e
+    estratégia de comunicação para marcas que querem ser reconhecidas
+    antes de precisar convencer.
+  </p>
+  <div class="hero-actions">
+    <a href="#processo" class="btn-primary">Ver meu processo</a>
+    <a href="#contato" class="btn-ghost">Falar comigo</a>
+  </div>
+  <div class="hero-number">BR</div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="section-eyebrow">01 — Sobre</div>
+  <div class="sobre-grid fade-in">
+    <div class="sobre-text">
+      <p>
+        Trabalho com marketing digital há aproximadamente dois anos,
+        com foco em <strong>copywriting, estratégia de conteúdo e posicionamento
+        de marcas nas redes sociais.</strong> Atuo principalmente com negócios locais
+        nos nichos de hotelaria, gastronomia e serviços.
+      </p>
+      <p>
+        Minha maior força está em perceber o que uma marca entrega
+        de verdade — e o que o digital dela ainda não consegue mostrar.
+        <strong>Esse gap é onde eu trabalho.</strong>
+      </p>
+      <p>
+        Não trabalho com volume por volume. Trabalho com intenção.
+        Cada peça de conteúdo existe porque tem um papel estratégico
+        dentro de uma narrativa maior. Comunicação sem observação
+        é decoração.
+      </p>
+      <div class="highlight-bar">
+        "Marca bem comunicada não convence. Ela é reconhecida."
+      </div>
+      <p>
+        Em 2026, integrei inteligência artificial e automação ao meu
+        fluxo de trabalho de forma estrutural — não como tendência,
+        mas como alavanca real de capacidade e qualidade de entrega.
+      </p>
+    </div>
+    <div class="sobre-aside">
+      <div class="aside-block">
+        <div class="aside-label">Localização</div>
+        <div class="aside-value">São Pedro de Alcântara, Santa Catarina</div>
+      </div>
+      <div class="aside-block">
+        <div class="aside-label">Especialidade</div>
+        <div class="aside-value">Estratégia de conteúdo · Copywriting · Posicionamento · IA aplicada ao marketing</div>
+      </div>
+      <div class="aside-block">
+        <div class="aside-label">Nichos de atuação</div>
+        <div class="aside-value">Hotelaria · Gastronomia · Serviços locais</div>
+      </div>
+      <div class="aside-block">
+        <div class="aside-label">Modelo de trabalho</div>
+        <div class="aside-value">PJ · Remoto · Poucos projetos com muita intenção</div>
+      </div>
+      <div class="aside-block">
+        <div class="aside-label">Agência</div>
+        <div class="aside-value">B Mídia — fundadora</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESSO -->
+<section id="processo">
+  <div class="section-eyebrow">02 — Processo</div>
+  <h2 class="section-title fade-in">Como eu penso antes de criar.</h2>
+  <div class="processo-steps fade-in">
+
+    <div class="step active" onclick="toggleStep(this)">
+      <div class="step-num">01</div>
+      <div class="step-title">Observação</div>
+      <div class="step-desc">Antes de qualquer execução, observo. O que a marca entrega? O que o digital já comunica? Onde está o gap?</div>
+      <div class="step-detail">
+        Analiso o perfil existente, o tom de voz atual, o que os concorrentes comunicam e o que o público espera. A pergunta central é sempre: o que essa marca entrega é maior do que o que ela mostra? Quando a resposta é sim, é onde começo a trabalhar.
+        <br><br>
+        Não inicio nenhum projeto sem essa leitura. Criação sem observação é decoração.
+      </div>
+      <div class="step-bar"></div>
+    </div>
+
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-num">02</div>
+      <div class="step-title">Diagnóstico</div>
+      <div class="step-desc">Identifico o principal problema de comunicação e chego ao briefing com uma hipótese de posicionamento já formada.</div>
+      <div class="step-detail">
+        O briefing não é um formulário preenchido — é um alinhamento estratégico. Chego à reunião com hipóteses, não com perguntas abertas. A marca tem diferencial claro ou está genérica? O público está sendo endereçado corretamente? O tom cria aproximação ou distância?
+        <br><br>
+        Esse diagnóstico define tudo que vem depois.
+      </div>
+      <div class="step-bar"></div>
+    </div>
+
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-num">03</div>
+      <div class="step-title">Estratégia</div>
+      <div class="step-desc">Defino os pilares de conteúdo, a identidade de comunicação e o calendário editorial com intenção real por trás de cada peça.</div>
+      <div class="step-detail">
+        Cada post existe por uma razão estratégica — posicionamento, autoridade, conversão, ou aproximação. Nunca para "manter frequência". O calendário editorial é um instrumento de construção de percepção, não uma lista de tarefas.
+        <br><br>
+        Entrego: identidade de comunicação, pilares de conteúdo, pauta mensal e guia de voz da marca.
+      </div>
+      <div class="step-bar"></div>
+    </div>
+
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-num">04</div>
+      <div class="step-title">Execução</div>
+      <div class="step-desc">Copywriting, design, edição e análise. Com IA integrada ao fluxo para escalar capacidade sem perder qualidade.</div>
+      <div class="step-detail">
+        Redijo as legendas, reviso os visuais e coordeno a produção com foco em coerência estética e consistência de voz. Uso inteligência artificial como ferramenta de pesquisa, curadoria e geração de rascunhos — sempre com revisão estratégica humana.
+        <br><br>
+        Entrego: conteúdo aprovado, agendado e analisado mensalmente.
+      </div>
+      <div class="step-bar"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- COPY & CONTEÚDO -->
+<section id="copy">
+  <div class="section-eyebrow">03 — Conteúdo</div>
+  <h2 class="section-title fade-in">Exemplos de escrita e estratégia.</h2>
+
+  <div class="copy-tabs-nav">
+    <button class="copy-tab-btn active" onclick="openCopyTab(event,'legendas')">Legendas</button>
+    <button class="copy-tab-btn" onclick="openCopyTab(event,'estrategia')">Estratégia</button>
+    <button class="copy-tab-btn" onclick="openCopyTab(event,'posicionamento')">Posicionamento</button>
+  </div>
+
+  <!-- LEGENDAS -->
+  <div id="legendas" class="copy-tab-content active fade-in">
+    <div class="copy-card">
+      <div class="copy-card-tag">Instagram · Produto · GS Produtos Funcionais</div>
+      <div class="copy-card-text">Três combos. Um cuidado só.
+Bem-vindo à Linha Essencial GS.
+
+Criamos três combinações pensadas pra encaixar na sua rotina. Sem esforço. Mantendo os produtos artesanais, zero glúten e zero lactose.
+
+Ritual. Equilíbrio. Seleção.
+
+Cada um com a própria proposta.
+O básico sendo bem feito.
+
+<em>#alimentaçãosaudável #zeroglúten #zerolactose #rotina</em></div>
+      <div class="copy-card-note">Estilo: apresentação de linha com ritmo de frases curtas. A nomeação dos combos cria identidade sem precisar descrever cada um.</div>
+    </div>
+    <div class="copy-card">
+      <div class="copy-card-tag">Instagram · Agência · Posicionamento</div>
+      <div class="copy-card-text">Existe uma diferença entre uma marca ser encontrada e uma marca ser desejada.
+
+Ser encontrada é consequência de tráfego e algoritmo. Ser desejada é consequência de percepção construída no tempo.
+
+A primeira depende de orçamento. A segunda depende de método.
+
+Por isso leva tempo. Por isso vale mais.
+
+Negócio local não disputa com gigante. Disputa com a indecisão de quem está prestes a escolher, com o segundo lugar na cabeça do cliente.
+
+Essa disputa não se vence com volume de post. Vence com clareza de posicionamento, consistência estética e comunicação que respeita a inteligência de quem está olhando.
+
+A B Mídia trabalha marcas que entendem que ser bem comunicada não é sorte. É decisão.
+
+Conversa com a gente se você quer sua marca desejada além de encontrada ✍🏻
+
+<em>#brandinglocal #posicionamentodemarca #comunicaçãoestratégica</em></div>
+      <div class="copy-card-note">Estilo: autoridade através do contraste. A estrutura de oposições (encontrada vs. desejada, orçamento vs. método) conduz o raciocínio antes do CTA.</div>
+    </div>
+    <div class="copy-card">
+      <div class="copy-card-tag">Instagram · Campanha política · Pertencimento</div>
+      <div class="copy-card-text">Aqui, vi a história ser escrita.
+
+Foi em São Pedro de Alcântara que eu construí meu lar, criei meus filhos e fiz laços que jamais serão quebrados.
+
+É aqui que quero ficar. Por mais que eu conheça novos lugares, aqui estão as minhas raízes. Raízes essas que eu cuido e cultivo todos os dias da minha vida.
+
+É essa a cidade que eu quero ver crescer, é aqui que eu vejo o potencial para nos tornarmos grandes. Nosso povo é grande e merece uma cidade pensada para todos.</div>
+      <div class="copy-card-note">Estilo: narrativa de pertencimento. A identidade pessoal do candidato como espelho da identidade da cidade — cria conexão emocional antes de qualquer proposta.</div>
+    </div>
+    <div class="copy-card">
+      <div class="copy-card-tag">Instagram · Hotelaria · Natureza</div>
+      <div class="copy-card-text">Longe da poluição das grandes cidades, você consegue apreciar o melhor da natureza.
+
+Aqui no Chalé, o céu estrelado faz parte da paisagem.
+
+Clica no link e garanta a sua reserva.
+
+<em>#chalé #céuestrelado #natureza</em></div>
+      <div class="copy-card-note">Estilo: contraste entre o que o público foge e o que a hospedagem oferece. Direto ao CTA sem alongar.</div>
+    </div>
+  </div>
+
+  <!-- ESTRATÉGIA -->
+  <div id="estrategia" class="copy-tab-content fade-in">
+    <div class="copy-card copy-single">
+      <div class="copy-card-tag">Diagnóstico estratégico · Marca de produtos saudáveis</div>
+      <div class="copy-card-text"><strong>Contexto:</strong> marca de produtos zero glúten e zero lactose, em fase inicial de Instagram, com produção artesanal limitada por sazonalidade.
+
+<strong>Hipótese de posicionamento:</strong> o diferencial não está nos ingredientes — está na raridade e na procedência artesanal. Produtos que existem só em determinadas épocas criam escassez natural. Isso não deve ser escondido: deve ser o centro da comunicação.
+
+<strong>Pilares de conteúdo sugeridos:</strong>
+1. Educação — o que é zero glúten de verdade vs. o que o mercado vende
+2. Processo — como é feito, quem faz, de onde vem a fruta
+3. Estilo de vida — o público que consome esses produtos e como eles vivem
+4. Sazonalidade — antecipar os produtos da temporada como evento
+
+<strong>Tom de voz:</strong> natural, íntimo, premium. A dona aparece provando — não explicando. A marca conversa, não vende.</div>
+      <div class="copy-card-note">Esse tipo de entrega chega antes da reunião de alinhamento — mostra que a leitura estratégica já foi feita.</div>
+    </div>
+    <div class="copy-card">
+      <div class="copy-card-tag">Estratégia de recuperação · Perfil inativo · Negócio local</div>
+      <div class="copy-card-text"><strong>Diagnóstico:</strong> perfil com meses sem postagem, engajamento zerado, bio desatualizada.
+
+<strong>O que não fazer:</strong> não voltar publicando como se nada tivesse acontecido. O retorno abrupto gera desconfiança de algoritmo e de público.
+
+<strong>Retorno em 3 fases:</strong>
+
+Fase 1 (2 semanas): curtir e comentar em posts do nicho. Reativar a conta nos bastidores.
+
+Fase 2 (2 semanas): stories leves sem compromisso. Presença sem pressão.
+
+Fase 3 (mês 2): feed com linha editorial nova. O retorno como parte da narrativa, não como desculpa.</div>
+      <div class="copy-card-note">Estrutura que respeita o algoritmo e reconstrói confiança de forma orgânica.</div>
+    </div>
+  </div>
+
+  <!-- POSICIONAMENTO -->
+  <div id="posicionamento" class="copy-tab-content fade-in">
+    <div class="copy-card copy-single">
+      <div class="copy-card-tag">Identidade de comunicação · Agência de marketing local</div>
+      <div class="copy-card-text"><strong>Posicionamento:</strong>
+Não somos uma agência de posts. Somos uma agência de percepção.
+
+<strong>Proposta de valor central:</strong>
+Transformamos negócios locais que entregam mais do que comunicam em marcas que são reconhecidas antes de precisar convencer.
+
+<strong>O que nos diferencia:</strong>
+— Observação antes de execução
+— Conteúdo com intenção estratégica, não com calendário cheio
+— Estética coerente com o posicionamento da marca
+— Uso de inteligência artificial como ferramenta, não como atalho
+
+<strong>Para quem:</strong>
+Negócios locais com diferencial real que ainda não encontraram a linguagem certa para comunicá-lo.
+
+<strong>Para quem não é:</strong>
+Quem quer volume, urgência falsa ou conteúdo genérico de nicho.</div>
+      <div class="copy-card-note">Posicionamento baseado em exclusão intencional — define quem atende E quem não atende. Isso eleva o valor percebido.</div>
+    </div>
+    <div class="copy-card">
+      <div class="copy-card-tag">Bio Instagram · Especialista em marketing</div>
+      <div class="copy-card-text">Elevamos o nível de profissionalismo da sua rede social
+Especialista em negócios locais
+Mande uma mensagem para crescermos juntos!</div>
+      <div class="copy-card-note">Bio direta com proposta de valor clara, nicho definido e CTA de aproximação. Simples o suficiente para ser lida em 3 segundos.</div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK DE IA -->
+<section id="ia">
+  <div class="section-eyebrow">04 — Stack de IA</div>
+  <h2 class="section-title fade-in">Ferramentas que ampliam o que eu faço.</h2>
+  <div class="stack-grid fade-in">
+    <div class="stack-card">
+      <div class="stack-icon">◆</div>
+      <div class="stack-name">Claude (Anthropic)</div>
+      <div class="stack-role">Estratégia · Copy · Análise</div>
+      <div class="stack-desc">Uso como parceiro estratégico: pesquisa de mercado, geração de primeiros rascunhos, diagnóstico de posicionamento e criação de agentes personalizados para automação de tarefas recorrentes.</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-icon">⬡</div>
+      <div class="stack-name">n8n</div>
+      <div class="stack-role">Automação · Integrações</div>
+      <div class="stack-desc">Plataforma de automação que conecta ferramentas sem código. Uso para criar fluxos que executam tarefas automaticamente — curadoria, relatórios, briefings — liberando tempo para trabalho estratégico.</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-icon">○</div>
+      <div class="stack-name">Obsidian</div>
+      <div class="stack-role">Gestão de conhecimento</div>
+      <div class="stack-desc">Base de conhecimento estruturada com contexto de cada cliente, processos da agência, referências de conteúdo e memória do negócio. O segundo cérebro que não esquece nada.</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-icon">□</div>
+      <div class="stack-name">ClickUp</div>
+      <div class="stack-role">Gestão de projetos</div>
+      <div class="stack-desc">Gerenciamento de tarefas, clientes e calendário editorial. Centraliza o que está em andamento, o que foi entregue e o que está pendente — para cada cliente.</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-icon">▽</div>
+      <div class="stack-name">Claude Code</div>
+      <div class="stack-role">Agentes no terminal</div>
+      <div class="stack-desc">Ferramenta de linha de comando que executa agentes de IA com acesso real ao sistema de arquivos, internet e ferramentas. Uso para criar automações avançadas que não dependem de interface gráfica.</div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-icon">◇</div>
+      <div class="stack-name">Canva + Edits + CapCut</div>
+      <div class="stack-role">Produção visual e vídeo</div>
+      <div class="stack-desc">Stack de criação visual integrada ao fluxo estratégico. O design existe para reforçar o posicionamento — não o contrário. Estética limpa, coerente e intencional em cada peça.</div>
+    </div>
+  </div>
+</section>
+
+<!-- AUTOMAÇÕES -->
+<section id="automacoes">
+  <div class="section-eyebrow">05 — Automações construídas</div>
+  <h2 class="section-title fade-in">O que eu já montei integrando IA.</h2>
+  <div class="auto-grid fade-in">
+    <div class="auto-card">
+      <div><span class="auto-status status-build">◐ Em construção</span></div>
+      <div class="auto-title">Agente de Curadoria de Conteúdo</div>
+      <div class="auto-desc">Agente de IA que vasculha Instagram, LinkedIn, YouTube e blogs de referência, filtra o que é relevante para os nichos atendidos e gera ideias de conteúdo adaptadas ao posicionamento da agência. Já opera via terminal — integração com n8n em andamento.</div>
+      <div class="auto-tags">
+        <span class="auto-tag">Claude Code</span>
+        <span class="auto-tag">Obsidian</span>
+        <span class="auto-tag">API Anthropic</span>
+      </div>
+    </div>
+    <div class="auto-card">
+      <div><span class="auto-status status-live">● Ativo</span></div>
+      <div class="auto-title">Diagnóstico Digital de Prospects</div>
+      <div class="auto-desc">Agente que pesquisa um prospect na web — site, Instagram, LinkedIn, YouTube — e gera um relatório estratégico interativo em HTML com pontos fortes, gaps de comunicação e oportunidades de melhoria. Entregue antes de qualquer reunião.</div>
+      <div class="auto-tags">
+        <span class="auto-tag">Claude</span>
+        <span class="auto-tag">Web Scraping</span>
+        <span class="auto-tag">HTML Interativo</span>
+      </div>
+    </div>
+    <div class="auto-card">
+      <div><span class="auto-status status-build">◐ Em construção</span></div>
+      <div class="auto-title">Briefing Diário Automatizado</div>
+      <div class="auto-desc">Fluxo n8n que consolida tarefas do ClickUp e eventos do Google Agenda e envia um briefing matinal via WhatsApp. O objetivo é começar cada dia já orientada, sem precisar abrir três ferramentas diferentes.</div>
+      <div class="auto-tags">
+        <span class="auto-tag">n8n</span>
+        <span class="auto-tag">ClickUp API</span>
+        <span class="auto-tag">WhatsApp</span>
+        <span class="auto-tag">Google Agenda</span>
+      </div>
+    </div>
+    <div class="auto-card">
+      <div><span class="auto-status status-build">◐ Em construção</span></div>
+      <div class="auto-title">Pipeline de Aprovação de Conteúdo</div>
+      <div class="auto-desc">Fluxo automatizado de aprovação de conteúdo com o cliente: o post sai do Canva, vai para aprovação via link único, e só é agendado depois da confirmação. Sem idas e vindas por WhatsApp.</div>
+      <div class="auto-tags">
+        <span class="auto-tag">n8n</span>
+        <span class="auto-tag">Canva API</span>
+        <span class="auto-tag">ClickUp</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="section-eyebrow">06 — Contato</div>
+  <div class="contato-inner fade-in">
+    <h2 class="contato-headline">Vamos conversar sobre o que a sua marca ainda não está comunicando.</h2>
+    <p class="contato-sub">
+      Se você identificou um gap entre o que o seu negócio entrega
+      e o que o digital está mostrando, provavelmente é por onde
+      eu começo. Me chama.
+    </p>
+    <div style="margin-bottom: 48px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="font-size: 13px; color: var(--cinza-claro);">E-mail: brunaribeirosocialmedia@gmail.com</div>
+      <div style="font-size: 13px; color: var(--cinza-claro);">Instagram: @soubrunaribeiro_</div>
+      <div style="font-size: 13px; color: var(--cinza-claro);">WhatsApp: (48) 99867-0342</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">Bruna Ribeiro · B Mídia</div>
+  <div class="footer-note">São Pedro de Alcântara, SC · 2026</div>
+</footer>
+
+<script>
+// ── STEP TOGGLE ──
+function toggleStep(el) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── COPY TABS ──
+function openCopyTab(evt, id) {
+  document.querySelectorAll('.copy-tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.copy-tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  evt.currentTarget.classList.add('active');
+}
+
+// ── FADE IN ON SCROLL ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── NAV ACTIVE LINK ──
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.getAttribute('id');
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current
+      ? 'var(--branco)' : '';
+  });
+});
+</script>
+
+</body>
+</html>
