@@ -735,14 +735,16 @@
       return;
     }
 
+    const params = new URLSearchParams();
+    Object.keys(data).forEach(key => params.append(key, data[key]));
+
     fetch(SHEET_URL, {
       method: 'POST',
       mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify(data)
+      body: params
     })
     .then(() => showSuccess())
-    .catch(() => showSuccess()); // no-cors sempre resolve, então mostra sucesso
+    .catch(() => showSuccess());
   }
 
   function showSuccess() {
