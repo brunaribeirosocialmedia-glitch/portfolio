@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briefing — B Mídia</title>
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Questrial&family=Alice:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo: #040022;
+    --cinza: #C2C2C2;
+    --cinza-claro: #E1E1E1;
+    --branco: #ffffff;
+    --accent: #7B7FD4;
+    --accent-soft: rgba(123,127,212,0.15);
+    --erro: #e07070;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--indigo);
+    color: var(--cinza-claro);
+    font-family: 'Questrial', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── BARRA DE PROGRESSO ── */
+  .progress-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    height: 3px;
+    background: rgba(255,255,255,0.06);
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed; top: 3px; left: 0; right: 0; z-index: 99;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 48px;
+    background: rgba(4,0,34,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(194,194,194,0.06);
+  }
+  .header-brand { font-family: 'Alex Brush', cursive; font-size: 22px; color: var(--cinza-claro); }
+  .header-step { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--cinza); }
+
+  /* ── WRAPPER ── */
+  .form-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 120px 24px 80px;
+    min-height: 100vh;
+  }
+
+  /* ── ETAPAS ── */
+  .step {
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 640px;
+    animation: fadeUp 0.5s ease;
+  }
+  .step.active { display: flex; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px;
+  }
+
+  .step-title {
+    font-family: 'Alice', serif;
+    font-size: clamp(24px, 4vw, 40px);
+    color: var(--branco);
+    line-height: 1.25;
+    margin-bottom: 10px;
+  }
+
+  .step-sub {
+    font-size: 14px; color: var(--cinza); margin-bottom: 36px;
+    line-height: 1.6; max-width: 520px;
+  }
+
+  /* ── INPUTS ── */
+  .field { width: 100%; margin-bottom: 20px; }
+
+  .field label {
+    display: block;
+    font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--cinza); margin-bottom: 10px;
+  }
+
+  .field input,
+  .field textarea,
+  .field select {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(194,194,194,0.25);
+    color: var(--branco);
+    font-family: 'Questrial', sans-serif;
+    font-size: 17px;
+    padding: 10px 0 14px;
+    outline: none;
+    transition: border-color 0.3s;
+    appearance: none;
+  }
+
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus {
+    border-bottom-color: var(--accent);
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder { color: rgba(194,194,194,0.3); font-size: 16px; }
+
+  .field textarea { resize: none; min-height: 80px; line-height: 1.6; }
+
+  .field select option { background: var(--indigo); color: var(--branco); }
+
+  /* ── OPÇÕES DE ESCOLHA ── */
+  .options-grid {
+    display: flex; flex-direction: column; gap: 10px;
+    width: 100%; margin-bottom: 20px;
+  }
+
+  .option-card {
+    border: 1px solid rgba(194,194,194,0.15);
+    padding: 16px 20px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    font-size: 14px; color: var(--cinza-claro);
+    display: flex; align-items: center; gap: 14px;
+    user-select: none;
+  }
+  .option-card:hover { border-color: rgba(123,127,212,0.4); }
+  .option-card.selected {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--branco);
+  }
+
+  .option-check {
+    width: 18px; height: 18px; flex-shrink: 0;
+    border: 1px solid rgba(194,194,194,0.3);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .option-card.selected .option-check {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+  .option-check::after {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--branco);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .option-card.selected .option-check::after { opacity: 1; }
+
+  /* Multi-select */
+  .option-card.multi .option-check { border-radius: 3px; }
+  .option-card.multi.selected .option-check::after {
+    content: '✓';
+    width: auto; height: auto;
+    font-size: 10px; border-radius: 0;
+    background: transparent;
+    color: var(--branco);
+  }
+
+  /* ── BOTÕES ── */
+  .step-actions {
+    display: flex; gap: 12px; align-items: center;
+    margin-top: 32px; flex-wrap: wrap;
+  }
+
+  .btn-next {
+    background: var(--cinza-claro); color: var(--indigo);
+    border: none; padding: 14px 36px;
+    font-family: 'Questrial', sans-serif;
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer; transition: opacity 0.2s;
+    border-radius: 2px;
+  }
+  .btn-next:hover { opacity: 0.85; }
+  .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-back {
+    background: transparent; color: var(--cinza);
+    border: none; padding: 14px 0;
+    font-family: 'Questrial', sans-serif;
+    font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+    cursor: pointer; transition: color 0.2s;
+  }
+  .btn-back:hover { color: var(--cinza-claro); }
+
+  .enter-hint {
+    font-size: 11px; color: rgba(194,194,194,0.4); letter-spacing: 0.5px;
+  }
+
+  /* ── TELA DE ENVIO ── */
+  .sending-screen, .success-screen {
+    display: none;
+    flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 40px 24px;
+    width: 100%; max-width: 640px;
+  }
+  .sending-screen.active, .success-screen.active { display: flex; }
+
+  .spinner {
+    width: 40px; height: 40px;
+    border: 2px solid rgba(123,127,212,0.2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 24px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .success-icon {
+    font-size: 48px; margin-bottom: 24px;
+  }
+
+  .success-title {
+    font-family: 'Alice', serif;
+    font-size: 32px; color: var(--branco);
+    margin-bottom: 12px;
+  }
+
+  .success-sub {
+    font-size: 14px; color: var(--cinza); line-height: 1.7;
+    max-width: 400px;
+  }
+
+  .success-script {
+    font-family: 'Alex Brush', cursive;
+    font-size: 56px; color: rgba(123,127,212,0.2);
+    margin-bottom: 8px;
+  }
+
+  /* ── TELA INICIAL ── */
+  .intro-screen {
+    display: flex;
+    flex-direction: column; align-items: flex-start;
+    width: 100%; max-width: 640px;
+    animation: fadeUp 0.6s ease;
+  }
+
+  .intro-label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px;
+    border: 1px solid rgba(123,127,212,0.3);
+    padding: 6px 18px; border-radius: 20px;
+    display: inline-block;
+  }
+
+  .intro-title {
+    font-family: 'Alice', serif;
+    font-size: clamp(32px, 5vw, 56px);
+    color: var(--branco); line-height: 1.15;
+    margin-bottom: 12px;
+  }
+
+  .intro-script {
+    font-family: 'Alex Brush', cursive;
+    font-size: clamp(28px, 4vw, 42px);
+    color: var(--accent); margin-bottom: 24px;
+  }
+
+  .intro-sub {
+    font-size: 15px; color: var(--cinza);
+    line-height: 1.8; margin-bottom: 40px;
+    max-width: 500px;
+  }
+
+  .intro-meta {
+    font-size: 12px; color: rgba(194,194,194,0.4);
+    margin-top: 16px; letter-spacing: 0.5px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 10px; letter-spacing: 1px;
+    color: rgba(194,194,194,0.2);
+    text-transform: uppercase;
+  }
+  footer span { font-family: 'Alex Brush', cursive; font-size: 14px; color: rgba(194,194,194,0.3); }
+
+  @media (max-width: 600px) {
+    header { padding: 16px 20px; }
+    .form-wrapper { padding: 100px 20px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<header>
+  <div class="header-brand">B Mídia</div>
+  <div class="header-step" id="headerStep">Briefing</div>
+</header>
+
+<div class="form-wrapper">
+
+  <!-- TELA INICIAL -->
+  <div class="intro-screen" id="introScreen">
+    <div class="intro-label">Formulário de briefing</div>
+    <h1 class="intro-title">Antes de criar,<br>preciso <em style="color:var(--cinza)">entender.</em></h1>
+    <div class="intro-script">Conta pra mim.</div>
+    <p class="intro-sub">
+      Este formulário é o ponto de partida de tudo. Quanto mais você compartilhar, mais precisa e intencional será a comunicação da sua marca. Leva cerca de <strong style="color:var(--cinza-claro)">5 minutos.</strong>
+    </p>
+    <button class="btn-next" onclick="startForm()">Começar</button>
+    <div class="intro-meta">6 seções · suas respostas vão direto para a Bruna</div>
+  </div>
+
+  <!-- ETAPA 1: Identificação -->
+  <div class="step" id="step-1">
+    <div class="step-label">Seção 01 de 06 · Identificação</div>
+    <h2 class="step-title">Quem é você<br>e sua marca?</h2>
+    <p class="step-sub">Informações básicas para começarmos com o pé direito.</p>
+
+    <div class="field">
+      <label>Seu nome completo *</label>
+      <input type="text" id="nome" placeholder="Como prefere ser chamada(o)" />
+    </div>
+    <div class="field">
+      <label>Nome da marca ou empresa *</label>
+      <input type="text" id="marca" placeholder="O nome que aparece nas redes" />
+    </div>
+    <div class="field">
+      <label>Segmento / nicho *</label>
+      <input type="text" id="segmento" placeholder="Ex: confecção, gastronomia, hotelaria..." />
+    </div>
+    <div class="field">
+      <label>WhatsApp para contato *</label>
+      <input type="tel" id="whatsapp" placeholder="(00) 00000-0000" />
+    </div>
+    <div class="field">
+      <label>Instagram (se tiver)</label>
+      <input type="text" id="instagram" placeholder="@suamarca" />
+    </div>
+    <div class="field">
+      <label>Site (se tiver)</label>
+      <input type="text" id="site" placeholder="www.suamarca.com.br" />
+    </div>
+
+    <div class="step-actions">
+      <button class="btn-next" onclick="nextStep(1)">Continuar</button>
+      <span class="enter-hint">ou pressione Enter ↵</span>
+    </div>
+  </div>
+
+  <!-- ETAPA 2: A Marca -->
+  <div class="step" id="step-2">
+    <div class="step-label">Seção 02 de 06 · A Marca</div>
+    <h2 class="step-title">Me fala sobre<br>o que você vende.</h2>
+    <p class="step-sub">Quanto mais específica a resposta, mais certeira será a comunicação.</p>
+
+    <div class="field">
+      <label>O que você vende? Descreva seu produto ou serviço principal *</label>
+      <textarea id="produto" placeholder="Ex: camisetas personalizadas e conjuntos de moletom estampados, voltados para o público jovem feminino..."></textarea>
+    </div>
+    <div class="field">
+      <label>Há quanto tempo está no mercado? *</label>
+      <input type="text" id="tempo_mercado" placeholder="Ex: 2 anos, começando agora..." />
+    </div>
+    <div class="field">
+      <label>Quem é o seu público ideal? *</label>
+      <textarea id="publico" placeholder="Idade, gênero, interesses, onde mora, como compra..."></textarea>
+    </div>
+    <div class="field">
+      <label>Qual o grande diferencial da sua marca? O que te faz diferente da concorrência? *</label>
+      <textarea id="diferencial" placeholder="O que faz um cliente escolher você em vez de qualquer outro?"></textarea>
+    </div>
+    <div class="field">
+      <label>Qual o ticket médio do seu produto/serviço?</label>
+      <input type="text" id="ticket" placeholder="Ex: R$ 80 a R$ 250" />
+    </div>
+
+    <div class="step-actions">
+      <button class="btn-next" onclick="nextStep(2)">Continuar</button>
+      <button class="btn-back" onclick="prevStep(2)">Voltar</button>
+    </div>
+  </div>
+
+  <!-- ETAPA 3: Presença Digital -->
+  <div class="step" id="step-3">
+    <div class="step-label">Seção 03 de 06 · Presença Digital</div>
+    <h2 class="step-title">Como você está<br>no digital hoje?</h2>
+    <p class="step-sub">Honestidade aqui é tudo. Não existe resposta errada.</p>
+
+    <div class="field">
+      <label>Quais redes sociais você usa atualmente? (marque todas que se aplicam)</label>
+    </div>
+    <div class="options-grid" id="redes-options">
+      <div class="option-card multi" onclick="toggleMulti(this, 'redes')">
+        <div class="option-check"></div> Instagram
+      </div>
+      <div class="option-card multi" onclick="toggleMulti(this, 'redes')">
+        <div class="option-check"></div> TikTok
+      </div>
+      <div class="option-card multi" onclick="toggleMulti(this, 'redes')">
+        <div class="option-check"></div> Facebook
+      </div>
+      <div class="option-card multi" onclick="toggleMulti(this, 'redes')">
+        <div class="option-check"></div> YouTube
+      </div>
+      <div class="option-card multi" onclick="toggleMulti(this, 'redes')">
+        <div class="option-check"></div> Nenhuma ainda
+      </div>
+    </div>
+
+    <div class="field" style="margin-top: 8px;">
+      <label>Com que frequência você posta hoje?</label>
+    </div>
+    <div class="options-grid" id="frequencia-options">
+      <div class="option-card" onclick="selectSingle(this, 'frequencia')">
+        <div class="option-check"></div> Todos os dias
+      </div>
+      <div class="option-card" onclick="selectSingle(this, 'frequencia')">
+        <div class="option-check"></div> De 2 a 4 vezes por semana
+      </div>
+      <div class="option-card" onclick="selectSingle(this, 'frequencia')">
+        <div class="option-check"></div> Uma vez por semana ou menos
+      </div>
+      <div class="option-card" onclick="selectSingle(this, 'frequencia')">
+        <div class="option-check"></div> Raramente ou nunca
+      </div>
+    </div>
+
+    <div class="field" style="margin-top: 16px;">
+      <label>O que você percebe que funciona melhor no seu perfil hoje?</label>
+      <textarea id="funciona" placeholder="Tipo de post, assunto, formato... ou 'ainda não sei'"></textarea>
+    </div>
+    <div class="field">
+      <label>O que você sente que não funciona ou que falta?</label>
+      <textarea id="nao_funciona" placeholder="Engajamento baixo, sem consistência, falta de ideia..."></textarea>
+    </div>
+
+    <div class="step-actions">
+      <button class="btn-next" onclick="nextStep(3)">Continuar</button>
+      <button class="btn-back" onclick="prevStep(3)">Voltar</button>
+    </div>
+  </div>
+
+  <!-- ETAPA 4: Objetivos -->
+  <div class="step" id="step-4">
+    <div class="step-label">Seção 04 de 06 · Objetivos</div>
+    <h2 class="step-title">O que você quer<br>alcançar?</h2>
+    <p class="step-sub">Metas claras geram estratégias claras.</p>
+
+    <div class="field">
+      <label>Qual é o principal objetivo com as redes sociais agora? *</label>
+    </div>
+    <div class="options-grid" id="objetivo-options">
+      <div class="option-card" onclick="selectSingle(this, 'objetivo')">
+        <div class="option-check"></div> Atrair mais clientes / gerar vendas
+      </div>
+      <div class="option-card" onclick="selectSingle(this, 'objetivo')">
+        <div class="option-check"></div> Construir autoridade e reconhecimento de marca
+      </div>
+      <div class="option-card" onclick="selectSingle(this, 'objetivo')">
+        <div class="option-check"></div> Criar uma presença do zero
+      </div>
+      <div class="option-card" onclick="selectSingle(this, 'objetivo')">
+        <div class="option-check"></div> Organizar e profissionalizar o que já existe
+      </div>
+    </div>
+
+    <div class="field" style="margin-top: 16px;">
+      <label>Em quanto tempo você espera ver resultados?</label>
+    </div>
+    <div class="options-grid" id="prazo-options">
+      <div class="option-card" onclick="selectSingle(this, 'prazo')">
+        <div class="option-check"></div> 1 a 2 meses
+      </div>
+      <div class="option-card" onclick="selectSingle(this, 'prazo')">
+        <div class="option-check"></div> 3 a 6 meses
+      </div>
+      <div class="option-card" onclick="selectSingle(this, 'prazo')">
+        <div class="option-check"></div> Estou pensando no longo prazo
+      </div>
+    </div>
+
+    <div class="field" style="margin-top: 16px;">
+      <label>Tem alguma meta específica que queira compartilhar?</label>
+      <textarea id="meta_especifica" placeholder="Ex: 500 seguidores em 3 meses, 10 vendas por semana, lançar no TikTok..."></textarea>
+    </div>
+
+    <div class="step-actions">
+      <button class="btn-next" onclick="nextStep(4)">Continuar</button>
+      <button class="btn-back" onclick="prevStep(4)">Voltar</button>
+    </div>
+  </div>
+
+  <!-- ETAPA 5: Referências e Estética -->
+  <div class="step" id="step-5">
+    <div class="step-label">Seção 05 de 06 · Referências</div>
+    <h2 class="step-title">Como você quer<br>que sua marca <em style="color:var(--cinza)">pareça?</em></h2>
+    <p class="step-sub">Referências ajudam a calibrar a linguagem visual e o tom de voz antes de qualquer criação.</p>
+
+    <div class="field">
+      <label>Cite 2 ou 3 marcas (de qualquer segmento) que admira na comunicação *</label>
+      <textarea id="referencias" placeholder="Podem ser concorrentes, marcas grandes, perfis do Instagram que te inspiram..."></textarea>
+    </div>
+    <div class="field">
+      <label>Como você quer que sua marca seja percebida? Escolha até 3 palavras</label>
+      <input type="text" id="percepcao" placeholder="Ex: sofisticada, acessível, moderna, aconchegante, ousada..." />
+    </div>
+    <div class="field">
+      <label>Tem alguma estética ou estilo visual que definitivamente NÃO quer?</label>
+      <textarea id="nao_quer" placeholder="Ex: nada muito colorido, sem fontes manuscritas, sem estética vintage..."></textarea>
+    </div>
+    <div class="field">
+      <label>Já tem identidade visual definida (logo, cores, fontes)?</label>
+    </div>
+    <div class="options-grid" id="identidade-options">
+      <div class="option-card" onclick="selectSingle(this, 'identidade')">
+        <div class="option-check"></div> Sim, tenho identidade completa
+      </div>
+      <div class="option-card" onclick="selectSingle(this, 'identidade')">
+        <div class="option-check"></div> Tenho logo, mas nada formal
+      </div>
+      <div class="option-card" onclick="selectSingle(this, 'identidade')">
+        <div class="option-check"></div> Não tenho nada ainda
+      </div>
+    </div>
+
+    <div class="step-actions">
+      <button class="btn-next" onclick="nextStep(5)">Continuar</button>
+      <button class="btn-back" onclick="prevStep(5)">Voltar</button>
+    </div>
+  </div>
+
+  <!-- ETAPA 6: Informações Práticas -->
+  <div class="step" id="step-6">
+    <div class="step-label">Seção 06 de 06 · Informações Práticas</div>
+    <h2 class="step-title">Últimos detalhes<br>antes de começar.</h2>
+    <p class="step-sub">Para organizar o processo e garantir que tudo flua bem.</p>
+
+    <div class="field">
+      <label>Você tem fotógrafo ou produz suas próprias fotos?</label>
+    </div>
+    <div class="options-grid" id="foto-options">
+      <div class="option-card" onclick="selectSingle(this, 'foto')">
+        <div class="option-check"></div> Tenho fotógrafo / produzo com qualidade
+      </div>
+      <div class="option-card" onclick="selectSingle(this, 'foto')">
+        <div class="option-check"></div> Faço as próprias fotos no celular
+      </div>
+      <div class="option-card" onclick="selectSingle(this, 'foto')">
+        <div class="option-check"></div> Ainda não tenho material visual organizado
+      </div>
+    </div>
+
+    <div class="field" style="margin-top: 16px;">
+      <label>Qual o melhor horário para reuniões ou alinhamentos?</label>
+      <input type="text" id="horario" placeholder="Ex: manhãs de segunda a quarta, após as 18h..." />
+    </div>
+    <div class="field">
+      <label>Tem algum prazo ou data importante que eu precise saber? (lançamento, evento, campanha)</label>
+      <textarea id="prazo_especifico" placeholder="Ex: quero estar no ar antes do Dia das Mães, tenho uma coleção nova saindo em julho..."></textarea>
+    </div>
+    <div class="field">
+      <label>Tem algo mais que queira compartilhar antes de começarmos?</label>
+      <textarea id="observacoes" placeholder="Fica à vontade. Qualquer contexto ajuda."></textarea>
+    </div>
+
+    <div class="step-actions">
+      <button class="btn-next" onclick="submitForm()">Enviar briefing</button>
+      <button class="btn-back" onclick="prevStep(6)">Voltar</button>
+    </div>
+  </div>
+
+  <!-- ENVIANDO -->
+  <div class="sending-screen" id="sendingScreen">
+    <div class="spinner"></div>
+    <p style="font-size:14px; color:var(--cinza)">Enviando suas respostas...</p>
+  </div>
+
+  <!-- SUCESSO -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-script">Obrigada</div>
+    <div class="success-icon">✦</div>
+    <h2 class="success-title">Briefing recebido.</h2>
+    <p class="success-sub">
+      A Bruna já foi notificada e vai analisar tudo com atenção.<br>
+      Em breve você receberá um retorno pelo WhatsApp.
+    </p>
+  </div>
+
+</div>
+
+<footer>
+  <span>B Mídia</span> &nbsp;·&nbsp; Formulário de Briefing &nbsp;·&nbsp; 2026
+</footer>
+
+<script>
+  // ── CONFIGURAÇÃO ──
+  // Cole aqui a URL do seu Google Apps Script depois de publicar
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycbzkhbBlAa1SRpfwu7KNTON7ou2gKRRUuu3P-JSnu0yTvRZHfjqSnPJWA_9P4s4d0giQBQ/exec";
+
+  // ── ESTADO ──
+  let currentStep = 0;
+  const totalSteps = 6;
+  const selections = {};
+
+  // ── INÍCIO ──
+  function startForm() {
+    document.getElementById('introScreen').style.display = 'none';
+    goToStep(1);
+  }
+
+  function goToStep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById('step-' + n);
+    if (el) { el.classList.add('active'); currentStep = n; }
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateProgress() {
+    const pct = (currentStep / totalSteps) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('headerStep').textContent =
+      currentStep > 0 ? `${currentStep} de ${totalSteps}` : 'Briefing';
+  }
+
+  function nextStep(current) {
+    if (current < totalSteps) goToStep(current + 1);
+  }
+
+  function prevStep(current) {
+    if (current > 1) goToStep(current - 1);
+    else { document.getElementById('introScreen').style.display = 'flex'; document.querySelector('.step.active')?.classList.remove('active'); currentStep = 0; updateProgress(); }
+  }
+
+  // Enter para avançar
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey && currentStep > 0 && currentStep < totalSteps) {
+      const active = document.querySelector('.step.active');
+      if (active && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        nextStep(currentStep);
+      }
+    }
+  });
+
+  // ── SELEÇÕES ──
+  function selectSingle(el, group) {
+    document.querySelectorAll(`[onclick*="selectSingle(this, '${group}')"]`).forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selections[group] = el.textContent.trim();
+  }
+
+  function toggleMulti(el, group) {
+    el.classList.toggle('selected');
+    const selected = Array.from(document.querySelectorAll(`[onclick*="toggleMulti(this, '${group}')"].selected`))
+      .map(c => c.textContent.trim());
+    selections[group] = selected.join(', ');
+  }
+
+  // ── ENVIO ──
+  function submitForm() {
+    // Mostrar tela de envio
+    document.querySelector('.step.active')?.classList.remove('active');
+    document.getElementById('sendingScreen').classList.add('active');
+
+    const data = {
+      // Etapa 1
+      nome:             val('nome'),
+      marca:            val('marca'),
+      segmento:         val('segmento'),
+      whatsapp:         val('whatsapp'),
+      instagram:        val('instagram'),
+      site:             val('site'),
+      // Etapa 2
+      produto:          val('produto'),
+      tempo_mercado:    val('tempo_mercado'),
+      publico:          val('publico'),
+      diferencial:      val('diferencial'),
+      ticket:           val('ticket'),
+      // Etapa 3
+      redes:            selections['redes'] || '',
+      frequencia:       selections['frequencia'] || '',
+      funciona:         val('funciona'),
+      nao_funciona:     val('nao_funciona'),
+      // Etapa 4
+      objetivo:         selections['objetivo'] || '',
+      prazo:            selections['prazo'] || '',
+      meta_especifica:  val('meta_especifica'),
+      // Etapa 5
+      referencias:      val('referencias'),
+      percepcao:        val('percepcao'),
+      nao_quer:         val('nao_quer'),
+      identidade:       selections['identidade'] || '',
+      // Etapa 6
+      foto:             selections['foto'] || '',
+      horario:          val('horario'),
+      prazo_especifico: val('prazo_especifico'),
+      observacoes:      val('observacoes'),
+      // Meta
+      data_envio:       new Date().toLocaleString('pt-BR')
+    };
+
+    if (SHEET_URL === "COLE_AQUI_A_URL_DO_APPS_SCRIPT") {
+      // Modo demo: simula envio
+      setTimeout(showSuccess, 1800);
+      return;
+    }
+
+    fetch(SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(() => showSuccess())
+    .catch(() => showSuccess()); // no-cors sempre resolve, então mostra sucesso
+  }
+
+  function showSuccess() {
+    document.getElementById('sendingScreen').classList.remove('active');
+    document.getElementById('successScreen').classList.add('active');
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('headerStep').textContent = 'Enviado ✓';
+  }
+
+  function val(id) {
+    const el = document.getElementById(id);
+    return el ? el.value.trim() : '';
+  }
+</script>
+</body>
+</html>
