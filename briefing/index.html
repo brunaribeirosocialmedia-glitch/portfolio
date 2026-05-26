@@ -623,8 +623,7 @@
 
 <script>
   // ── CONFIGURAÇÃO ──
-  // Cole aqui a URL do seu Google Apps Script depois de publicar
-  const SHEET_URL = "https://script.google.com/macros/s/AKfycbzkhbBlAa1SRpfwu7KNTON7ou2gKRRUuu3P-JSnu0yTvRZHfjqSnPJWA_9P4s4d0giQBQ/exec";
+  const SHEET_URL = "https://formsubmit.co/brunaribeirosocialmedia@gmail.com";
 
   // ── ESTADO ──
   let currentStep = 0;
@@ -740,6 +739,15 @@
     form.action = SHEET_URL;
     form.target = '_submit_iframe';
     form.style.display = 'none';
+
+    // Campos especiais do Formsubmit
+    const extras = {
+      _subject: `Novo briefing recebido — ${data.marca || data.nome || 'cliente'}`,
+      _captcha: 'false',
+      _template: 'table'
+    };
+
+    Object.assign(data, extras);
 
     Object.keys(data).forEach(key => {
       const input = document.createElement('input');
