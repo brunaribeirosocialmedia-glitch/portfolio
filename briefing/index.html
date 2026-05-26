@@ -688,63 +688,72 @@
 
   // ── ENVIO ──
   function submitForm() {
-    // Mostrar tela de envio
     document.querySelector('.step.active')?.classList.remove('active');
     document.getElementById('sendingScreen').classList.add('active');
 
     const data = {
-      // Etapa 1
       nome:             val('nome'),
       marca:            val('marca'),
       segmento:         val('segmento'),
       whatsapp:         val('whatsapp'),
       instagram:        val('instagram'),
       site:             val('site'),
-      // Etapa 2
       produto:          val('produto'),
       tempo_mercado:    val('tempo_mercado'),
       publico:          val('publico'),
       diferencial:      val('diferencial'),
       ticket:           val('ticket'),
-      // Etapa 3
       redes:            selections['redes'] || '',
       frequencia:       selections['frequencia'] || '',
       funciona:         val('funciona'),
       nao_funciona:     val('nao_funciona'),
-      // Etapa 4
       objetivo:         selections['objetivo'] || '',
       prazo:            selections['prazo'] || '',
       meta_especifica:  val('meta_especifica'),
-      // Etapa 5
       referencias:      val('referencias'),
       percepcao:        val('percepcao'),
       nao_quer:         val('nao_quer'),
       identidade:       selections['identidade'] || '',
-      // Etapa 6
       foto:             selections['foto'] || '',
       horario:          val('horario'),
       prazo_especifico: val('prazo_especifico'),
       observacoes:      val('observacoes'),
-      // Meta
       data_envio:       new Date().toLocaleString('pt-BR')
     };
 
-    if (SHEET_URL === "COLE_AQUI_A_URL_DO_APPS_SCRIPT") {
-      // Modo demo: simula envio
-      setTimeout(showSuccess, 1800);
-      return;
+    // Cria iframe oculto para receber a resposta (sem CORS)
+    let iframe = document.getElementById('_submit_iframe');
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.id = '_submit_iframe';
+      iframe.name = '_submit_iframe';
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
     }
 
-    const params = new URLSearchParams();
-    Object.keys(data).forEach(key => params.append(key, data[key]));
+    // Cria formulário oculto apontando para o iframe
+    let form = document.getElementById('_submit_form');
+    if (form) form.remove();
+    form = document.createElement('form');
+    form.id = '_submit_form';
+    form.method = 'POST';
+    form.action = SHEET_URL;
+    form.target = '_submit_iframe';
+    form.style.display = 'none';
 
-    fetch(SHEET_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: params
-    })
-    .then(() => showSuccess())
-    .catch(() => showSuccess());
+    Object.keys(data).forEach(key => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = data[key] || '';
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+
+    // Mostra sucesso após 2s (o iframe processa em segundo plano)
+    setTimeout(showSuccess, 2000);
   }
 
   function showSuccess() {
