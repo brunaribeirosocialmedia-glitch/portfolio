@@ -623,7 +623,7 @@
 
 <script>
   // ── CONFIGURAÇÃO ──
-  const SHEET_URL = "https://formsubmit.co/brunaribeirosocialmedia@gmail.com";
+  const ACCESS_KEY = "8db4522f-7a9d-4470-9abb-0b9ea9dd7e6b";
 
   // ── ESTADO ──
   let currentStep = 0;
@@ -720,48 +720,32 @@
       data_envio:       new Date().toLocaleString('pt-BR')
     };
 
-    // Cria iframe oculto para receber a resposta (sem CORS)
-    let iframe = document.getElementById('_submit_iframe');
-    if (!iframe) {
-      iframe = document.createElement('iframe');
-      iframe.id = '_submit_iframe';
-      iframe.name = '_submit_iframe';
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
-    }
-
-    // Cria formulário oculto apontando para o iframe
-    let form = document.getElementById('_submit_form');
-    if (form) form.remove();
-    form = document.createElement('form');
-    form.id = '_submit_form';
-    form.method = 'POST';
-    form.action = SHEET_URL;
-    form.target = '_submit_iframe';
-    form.style.display = 'none';
-
-    // Campos especiais do Formsubmit
-    const extras = {
-      _subject: `Novo briefing recebido — ${data.marca || data.nome || 'cliente'}`,
-      _captcha: 'false',
-      _template: 'table'
-    };
-
-    Object.assign(data, extras);
-
-    Object.keys(data).forEach(key => {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = key;
-      input.value = data[key] || '';
-      form.appendChild(input);
+    // Envia via Web3Forms
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        access_key: ACCESS_KEY,
+        subject: `Novo briefing — ${data.marca || data.nome || 'cliente'}`,
+        from_name: 'Briefing B Mídia',
+        ...data
+      })
+    })
+    .then(res => res.json())
+    .then(res => {
+      if (res.success) {
+        showSuccess();
+      } else {
+        alert('Erro ao enviar. Tente novamente.');
+        document.getElementById('sendingScreen').classList.remove('active');
+        document.getElementById('step-6').classList.add('active');
+      }
+    })
+    .catch(() => {
+      alert('Erro de conexão. Verifique sua internet e tente novamente.');
+      document.getElementById('sendingScreen').classList.remove('active');
+      document.getElementById('step-6').classList.add('active');
     });
-
-    document.body.appendChild(form);
-    form.submit();
-
-    // Mostra sucesso após 2s (o iframe processa em segundo plano)
-    setTimeout(showSuccess, 2000);
   }
 
   function showSuccess() {
